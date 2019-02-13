@@ -14,23 +14,26 @@
             android:scaleType="fitCenter"
             android:clickable="true"
             android:layout_marginTop="@dimen/padding_normal"
-            android:foreground="?attr/selectableItemBackground"
             android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_height="250dp"/>
 
-    <TextView
-            android:id="@+id/tvName"
-            android:visibility="gone"
+    <EditText
+            android:id="@+id/etName"
+            android:inputType="textPersonName"
+            android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="@string/name"
+            android:textColorHint="@android:color/white"
+            android:maxLines="1"
             app:layout_constraintTop_toBottomOf="@id/ivPerson"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:gravity="center"
-            tools:text="@tools:sample/full_names"
             android:textSize="@dimen/font_large"
             android:layout_marginTop="@dimen/padding_normal"
             style="@style/Text.Primary.Bold"/>
@@ -39,42 +42,33 @@
             android:id="@+id/clNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_marginTop="@dimen/padding_small"
-            app:layout_constraintTop_toBottomOf="@id/tvName">
-        <TextView
-                android:id="@+id/tvNumber"
+            app:layout_constraintTop_toBottomOf="@id/etName">
+
+        <EditText
+                android:id="@+id/etNumber"
+                android:inputType="phone"
                 android:padding="@dimen/padding_small"
+                android:background="@null"
                 android:gravity="start|center_vertical"
                 style="@style/Text.Primary"
+                android:hint="@string/number"
+                android:textColorHint="@android:color/white"
+                android:maxLines="1"
                 android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"
                 android:focusable="true"
                 app:layout_constraintStart_toStartOf="parent"
                 android:drawableStart="@drawable/ic_call"
                 android:drawablePadding="@dimen/padding_normal"
-                tools:text="@tools:sample/us_phones"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-
-        <ImageView
-                android:id="@+id/ivMessage"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_message"
-                android:foreground="?attr/selectableItemBackground"
-                android:layout_marginEnd="@dimen/padding_medium"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="@id/tvNumber"/>
 
         <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="@id/tvNumber"
+                app:layout_constraintBottom_toBottomOf="@id/etNumber"
                 android:layout_marginStart="45dp"
                 android:layout_marginTop="@dimen/padding_small"/>
 
@@ -84,23 +78,26 @@
             android:id="@+id/clEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_marginTop="@dimen/padding_normal"
             app:layout_constraintTop_toBottomOf="@id/clNumber">
 
-        <TextView
-                android:id="@+id/tvEmail"
+        <EditText
+                android:id="@+id/etEmail"
                 android:padding="@dimen/padding_small"
+                android:hint="@string/email"
+                android:textColorHint="@android:color/white"
                 android:gravity="start|center_vertical"
                 style="@style/Text.Primary"
+                android:maxLines="1"
+                android:inputType="textEmailAddress"
                 android:clickable="true"
                 android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
+                android:background="@null"
                 app:layout_constraintStart_toStartOf="parent"
                 android:drawableStart="@drawable/ic_mail"
                 android:drawablePadding="@dimen/padding_normal"
-                tools:text="@tools:sample/us_zipcodes"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
 
@@ -108,10 +105,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="@id/tvEmail"
+                app:layout_constraintBottom_toBottomOf="@id/etEmail"
                 android:layout_marginStart="45dp"
                 android:layout_marginTop="@dimen/padding_small"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+            android:background="@drawable/bg_rounded_corner_button"
+            android:id="@+id/btnSubmit"
+            android:layout_width="150dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="@dimen/padding_normal"
+            android:textSize="@dimen/font_normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clEmail"
+            android:layout_marginTop="@dimen/padding_big"
+            android:text="@string/save"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_height="wrap_content"/>
+
 
     <View
             app:layout_constraintTop_toBottomOf="@id/clEmail"

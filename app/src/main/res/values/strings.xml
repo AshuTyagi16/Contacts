@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Contacts</string>
+
+    <!-- Add Contact -->
+    <string name="name">Enter name here</string>
+    <string name="name_cannot_be_blank">Name cannot be left blank</string>
+    <string name="email">Enter email here</string>
+    <string name="number">Phone number</string>
+    <string name="save">Save</string>
 </resources>

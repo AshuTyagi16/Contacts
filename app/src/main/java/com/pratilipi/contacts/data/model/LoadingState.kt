@@ -1,4 +1,4 @@
-package com.pratilipi.contacts.data
+package com.pratilipi.contacts.data.model
 
 class LoadingState(val status: Status, val msg: String = "Some error occurred") {
 

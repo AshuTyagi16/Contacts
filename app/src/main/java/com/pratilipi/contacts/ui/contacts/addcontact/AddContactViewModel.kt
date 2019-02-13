@@ -1,20 +1,19 @@
-package com.pratilipi.contacts.ui.contacts
+package com.pratilipi.contacts.ui.contacts.addcontact
 
+import androidx.annotation.UiThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.github.tamir7.contacts.Contact
 import com.pratilipi.contacts.data.model.LoadingState
 import com.pratilipi.contacts.util.ContactUtil
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
-class ContactsViewModel @Inject constructor(private val contactUtil: ContactUtil) : ViewModel() {
+class AddContactViewModel @Inject constructor(private val contactUtil: ContactUtil) : ViewModel() {
 
-    private val _contactsLiveData = MutableLiveData<List<Contact>>()
-    val contactsLiveData: LiveData<List<Contact>>
-        get() = _contactsLiveData
-
+    private val _addContactLiveData = MutableLiveData<Boolean>()
+    val addContactLiveData: LiveData<Boolean>
+        get() = _addContactLiveData
 
     private val _loadingStateLiveData = MutableLiveData<LoadingState>()
     val loadingStateLiveData: LiveData<LoadingState>
@@ -23,13 +22,14 @@ class ContactsViewModel @Inject constructor(private val contactUtil: ContactUtil
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
-    fun getContacts() {
+    @UiThread
+    fun addContact(displayName: String?, phoneNumber: String?, email: String?) {
         _loadingStateLiveData.postValue(LoadingState(LoadingState.Status.LOADING))
         uiScope.launch {
-            val contacts = withContext(Dispatchers.IO) {
-                contactUtil.getContacts()
+            val isAdded = withContext(Dispatchers.IO) {
+                contactUtil.addContact(displayName, phoneNumber, email)
             }
-            _contactsLiveData.postValue(contacts)
+            _addContactLiveData.postValue(isAdded)
             _loadingStateLiveData.postValue(LoadingState(LoadingState.Status.SUCCESS))
         }
     }

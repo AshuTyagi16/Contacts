@@ -11,12 +11,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.tamir7.contacts.Contact
 import com.pratilipi.contacts.Contacts
 import com.pratilipi.contacts.R
-import com.pratilipi.contacts.data.LoadingState
+import com.pratilipi.contacts.data.model.LoadingState
+import com.pratilipi.contacts.data.model.event.ContactAddedEvent
 import com.pratilipi.contacts.di.component.DaggerMainActivityComponent
 import com.pratilipi.contacts.di.module.MainActivityModule
 import com.pratilipi.contacts.ui.base.ItemDecorator
+import com.pratilipi.contacts.ui.contacts.addcontact.AddContactFragment
 import com.pratilipi.contacts.ui.contacts.contactdetail.ContactDetailFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import permissions.dispatcher.*
 import javax.inject.Inject
 
@@ -58,25 +63,30 @@ class MainActivity : AppCompatActivity(),
         observeContacts()
 
         observeLoadingState()
+
+        fabAddContact.setOnClickListener {
+            val fragment = AddContactFragment.newInstance()
+            fragment.show(supportFragmentManager, fragment.tag)
+        }
     }
 
-    @NeedsPermission(Manifest.permission.READ_CONTACTS)
+    @NeedsPermission(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
     fun readContacts() {
         contactsViewModel.getContacts()
     }
 
-    @OnShowRationale(Manifest.permission.READ_CONTACTS)
+    @OnShowRationale(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
     fun showContactRationale(request: PermissionRequest) {
         request.proceed()
 
     }
 
-    @OnPermissionDenied(Manifest.permission.READ_CONTACTS)
+    @OnPermissionDenied(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
     fun onReadContactsPermissionDenied() {
 
     }
 
-    @OnNeverAskAgain(Manifest.permission.READ_CONTACTS)
+    @OnNeverAskAgain(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
     fun onReadContactsPermissionDeniedForever() {
 
     }
@@ -114,6 +124,22 @@ class MainActivity : AppCompatActivity(),
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (::contactsViewModel.isInitialized)
+            contactsViewModel.getContacts()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
     override fun onItemClicked(position: Int, contact: Contact) {
         val fragment = ContactDetailFragment.newInstance(contact)
         fragment.show(supportFragmentManager, fragment.tag)
@@ -122,5 +148,13 @@ class MainActivity : AppCompatActivity(),
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         onRequestPermissionsResult(requestCode, grantResults)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onContactAddedEvent(event: ContactAddedEvent) {
+        if (::contactsViewModel.isInitialized) {
+            contactsViewModel.getContacts()
+            EventBus.getDefault().removeStickyEvent(event)
+        }
     }
 }

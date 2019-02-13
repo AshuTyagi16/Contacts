@@ -69,4 +69,7 @@ dependencies {
 
     implementation 'com.github.tamir7.contacts:contacts:1.1.7'
 
+    //FastScroller
+    implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.0'
+
 }

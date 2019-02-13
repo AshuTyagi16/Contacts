@@ -33,7 +33,7 @@ class ContactsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }
 
-    suspend fun getDrawable(id: String, name: String): TextDrawable {
+    private suspend fun getDrawable(id: String, name: String): TextDrawable {
         val substr = if (name.length >= 3)
             name.substring(0, 2)
         else

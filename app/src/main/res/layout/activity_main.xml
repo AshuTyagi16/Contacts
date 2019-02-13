@@ -8,15 +8,24 @@
         android:layout_height="match_parent"
         tools:context=".ui.contacts.MainActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
             android:id="@+id/rvContacts"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="gone"
+            android:visibility="visible"
             tools:listitem="@layout/cell_contact"
             tools:itemCount="15"
+            app:fastScrollPopupBgColor="@color/colorPrimary"
+            app:fastScrollPopupTextColor="@android:color/white"
+            app:fastScrollPopupTextSize="48sp"
+            app:fastScrollPopupBackgroundSize="88dp"
+            app:fastScrollThumbColor="@color/colorPrimaryDark"
+            app:fastScrollTrackColor="#505050"
+            app:fastScrollAutoHide="false"
+            app:fastScrollPopupPosition="adjacent"
+            app:fastScrollPopupTextVerticalAlignmentMode="font_metrics"
             android:layoutAnimation="@anim/layout_animation_fall_down"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
@@ -27,7 +36,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/progressBar"
-            android:visibility="visible"
+            android:visibility="gone"
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

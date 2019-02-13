@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
+apply plugin: 'kotlin-kapt'
+
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -24,7 +26,8 @@ android {
 
 dependencies {
 
-    final dagger_version = '2.20'
+    final dagger_version = '2.16'
+    final lifecycle_version = '2.0.0'
     final runtime_permissions_version = '4.3.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -56,5 +59,9 @@ dependencies {
     //RunTime Permissions
     implementation "org.permissionsdispatcher:permissionsdispatcher:$runtime_permissions_version"
     kapt "org.permissionsdispatcher:permissionsdispatcher-processor:$runtime_permissions_version"
+
+    //LifeCycle Components
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
 }

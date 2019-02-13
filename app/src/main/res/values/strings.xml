@@ -7,4 +7,14 @@
     <string name="email">Enter email here</string>
     <string name="number">Phone number</string>
     <string name="save">Save</string>
+    <string name="contact_added_successfully">Contact added successfully</string>
+    <string name="some_error_occurred">Some error occurred</string>
+
+    <!-- Permisions -->
+    <string name="please_allow_permission">Please allow permissions</string>
+    <string name="turn_on">Turn On</string>
+    <string name="permission_message">To use Contacts, please allow access to read and write contact permission. we
+        cannot show or add contacts without these permissions.
+    </string>
+
 </resources>

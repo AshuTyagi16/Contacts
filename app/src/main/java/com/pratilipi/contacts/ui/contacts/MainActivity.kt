@@ -1,9 +1,14 @@
 package com.pratilipi.contacts.ui.contacts
 
 import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -18,6 +23,7 @@ import com.pratilipi.contacts.di.module.MainActivityModule
 import com.pratilipi.contacts.ui.base.ItemDecorator
 import com.pratilipi.contacts.ui.contacts.addcontact.AddContactFragment
 import com.pratilipi.contacts.ui.contacts.contactdetail.ContactDetailFragment
+import com.pratilipi.contacts.ui.widget.PermissionModal
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -27,7 +33,7 @@ import javax.inject.Inject
 
 @RuntimePermissions
 class MainActivity : AppCompatActivity(),
-    ContactsAdapter.OnItemClickListener {
+    ContactsAdapter.OnItemClickListener, PermissionModal.OnAskPermissionClickListener {
 
     @Inject
     lateinit var adapter: ContactsAdapter
@@ -43,6 +49,12 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var contactsViewModel: ContactsViewModel
 
+    private lateinit var permissionModal: PermissionModal
+
+    companion object {
+        private const val PERMISSION_CODE = 9921
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -55,8 +67,8 @@ class MainActivity : AppCompatActivity(),
         component.injectMainActivity(this)
 
         contactsViewModel = ViewModelProviders.of(this, viewModelFactory).get(ContactsViewModel::class.java)
-
-        readContactsWithPermissionCheck()
+        permissionModal = PermissionModal(this)
+        permissionModal.setOnAskPermissionClickListener(this)
 
         initializeRecyclerView()
 
@@ -68,10 +80,15 @@ class MainActivity : AppCompatActivity(),
             val fragment = AddContactFragment.newInstance()
             fragment.show(supportFragmentManager, fragment.tag)
         }
+
+        if (checkCallingOrSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            permissionModal.show()
+        }
     }
 
     @NeedsPermission(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
     fun readContacts() {
+        permissionModal.dismiss()
         contactsViewModel.getContacts()
     }
 
@@ -83,12 +100,12 @@ class MainActivity : AppCompatActivity(),
 
     @OnPermissionDenied(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
     fun onReadContactsPermissionDenied() {
-
+        Toast.makeText(this, getString(R.string.please_allow_permission), Toast.LENGTH_SHORT).show()
     }
 
     @OnNeverAskAgain(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
     fun onReadContactsPermissionDeniedForever() {
-
+        openSettings()
     }
 
     private fun initializeRecyclerView() {
@@ -124,10 +141,19 @@ class MainActivity : AppCompatActivity(),
         })
     }
 
+    private fun openSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", packageName, null)
+        intent.setData(uri)
+        startActivityForResult(intent, PERMISSION_CODE)
+    }
+
     override fun onResume() {
         super.onResume()
-        if (::contactsViewModel.isInitialized)
-            contactsViewModel.getContacts()
+        if (checkCallingOrSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            if (::contactsViewModel.isInitialized)
+                contactsViewModel.getContacts()
+        }
     }
 
     override fun onStart() {
@@ -143,6 +169,10 @@ class MainActivity : AppCompatActivity(),
     override fun onItemClicked(position: Int, contact: Contact) {
         val fragment = ContactDetailFragment.newInstance(contact)
         fragment.show(supportFragmentManager, fragment.tag)
+    }
+
+    override fun onAskPermissionClick() {
+        readContactsWithPermissionCheck()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

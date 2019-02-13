@@ -57,7 +57,10 @@ class AddContactFragment : RoundedBottomSheetDialogFragment() {
         addContactViewModel.addContactLiveData.observe(this, Observer {
             if (it)
                 EventBus.getDefault().postSticky(ContactAddedEvent())
-
+            else {
+                Toast.makeText(context, getString(R.string.some_error_occurred), Toast.LENGTH_SHORT)
+                    .show()
+            }
         })
 
         addContactViewModel.loadingStateLiveData.observe(this, Observer { loadingState ->
@@ -66,6 +69,10 @@ class AddContactFragment : RoundedBottomSheetDialogFragment() {
 
                 }
                 LoadingState.Status.SUCCESS -> {
+                    context?.let {
+                        Toast.makeText(context, getString(R.string.contact_added_successfully), Toast.LENGTH_SHORT)
+                            .show()
+                    }
                     dismiss()
 
                 }

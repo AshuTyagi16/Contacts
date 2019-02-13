@@ -1,5 +1,6 @@
 package com.pratilipi.contacts.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.github.tamir7.contacts.Contact
 import com.github.tamir7.contacts.Contacts
@@ -8,6 +9,9 @@ import android.content.ContentProviderOperation
 import androidx.annotation.WorkerThread
 import android.net.Uri
 import android.provider.ContactsContract.PhoneLookup
+import android.graphics.Bitmap
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 
 class ContactUtil(private val context: Context) {
@@ -17,8 +21,9 @@ class ContactUtil(private val context: Context) {
         return Contacts.getQuery().find()
     }
 
+    @SuppressLint("WrongThread")
     @WorkerThread
-    suspend fun addContact(displayName: String?, number: String?, emailID: String?): Boolean {
+    suspend fun addContact(displayName: String?, number: String?, emailID: String?, image: Bitmap?): Boolean {
         val operations = ArrayList<ContentProviderOperation>()
 
         operations.add(
@@ -46,6 +51,27 @@ class ContactUtil(private val context: Context) {
                     ).build()
             )
         }
+
+        image?.let {
+            val stream = ByteArrayOutputStream()
+            image.compress(Bitmap.CompressFormat.WEBP, 10, stream)
+
+            operations.add(
+                ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.IS_SUPER_PRIMARY, 1)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO, stream.toByteArray())
+                    .build()
+            )
+
+            try {
+                stream.flush()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+
 
         number?.let {
             operations.add(

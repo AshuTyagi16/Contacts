@@ -1,6 +1,12 @@
 package com.pratilipi.contacts.ui.contacts.addcontact
 
+import android.Manifest
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -15,7 +21,11 @@ import com.pratilipi.contacts.ui.base.RoundedBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_add_contact.*
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
+import gun0912.tedbottompicker.TedBottomPicker
+import permissions.dispatcher.*
 
+
+@RuntimePermissions
 class AddContactFragment : RoundedBottomSheetDialogFragment() {
 
     @Inject
@@ -24,6 +34,7 @@ class AddContactFragment : RoundedBottomSheetDialogFragment() {
     private lateinit var addContactViewModel: AddContactViewModel
 
     companion object {
+        private const val PERMISSION_CODE = 9923
         fun newInstance(): AddContactFragment {
             return AddContactFragment()
         }
@@ -84,12 +95,21 @@ class AddContactFragment : RoundedBottomSheetDialogFragment() {
     }
 
     private fun setClickListeners() {
+
+        ivPerson.setOnClickListener {
+            showPickerWithPermissionCheck()
+        }
+
         btnSubmit.setOnClickListener {
             val name = etName.text.trim().toString()
             val number = etNumber.text.trim().toString()
             val email = etEmail.text.trim().toString()
             if (name.isNotBlank() && name.isNotEmpty()) {
-                addContactViewModel.addContact(name, number, email)
+                var image: Bitmap? = null
+                ivPerson.drawable?.let {
+                    image = (it as BitmapDrawable).bitmap
+                }
+                addContactViewModel.addContact(name, number, email, image)
             } else {
                 context?.let {
                     val error = getString(R.string.name_cannot_be_blank)
@@ -97,6 +117,51 @@ class AddContactFragment : RoundedBottomSheetDialogFragment() {
                     Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
+
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun showPicker() {
+        context?.let {
+            val picker = TedBottomPicker.Builder(it)
+                .setSelectMaxCount(1)
+                .setPeekHeight(1000)
+                .showTitle(true)
+                .showCameraTile(false)
+                .showGalleryTile(false)
+                .setCompleteButtonText("Done")
+                .setEmptySelectionText("No Image Selected")
+                .setOnImageSelectedListener { uri ->
+                    ivPerson.setImageURI(uri)
+                }
+                .create()
+            picker.show(childFragmentManager, picker.tag)
+        }
+    }
+
+    @OnShowRationale(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun showStorageRationale(request: PermissionRequest) {
+        request.proceed()
+    }
+
+    @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun onPermissionDenied() {
+        context?.let {
+            Toast.makeText(it, getString(R.string.please_allow_permission), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @OnNeverAskAgain(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun onStorageForeverDenied() {
+        openSettings()
+    }
+
+    private fun openSettings() {
+        context?.let {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            val uri = Uri.fromParts("package", it.packageName, null)
+            intent.data = uri
+            startActivityForResult(intent, PERMISSION_CODE)
         }
     }
 }

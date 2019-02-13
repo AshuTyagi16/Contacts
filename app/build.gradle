@@ -75,4 +75,7 @@ dependencies {
     //EventBus
     implementation 'org.greenrobot:eventbus:3.1.1'
 
+    //ImagePicker
+    implementation 'gun0912.ted:tedbottompicker:1.2.6'
+
 }

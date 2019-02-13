@@ -1,5 +1,6 @@
 package com.pratilipi.contacts.ui.contacts.addcontact
 
+import android.graphics.Bitmap
 import androidx.annotation.UiThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,11 +24,11 @@ class AddContactViewModel @Inject constructor(private val contactUtil: ContactUt
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
     @UiThread
-    fun addContact(displayName: String?, phoneNumber: String?, email: String?) {
+    fun addContact(displayName: String?, phoneNumber: String?, email: String?, image: Bitmap?) {
         _loadingStateLiveData.postValue(LoadingState(LoadingState.Status.LOADING))
         uiScope.launch {
             val isAdded = withContext(Dispatchers.IO) {
-                contactUtil.addContact(displayName, phoneNumber, email)
+                contactUtil.addContact(displayName, phoneNumber, email, image)
             }
             _addContactLiveData.postValue(isAdded)
             _loadingStateLiveData.postValue(LoadingState(LoadingState.Status.SUCCESS))

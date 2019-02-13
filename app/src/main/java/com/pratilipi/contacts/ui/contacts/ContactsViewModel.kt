@@ -3,13 +3,13 @@ package com.pratilipi.contacts.ui.contacts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.pratilipi.contacts.data.Contact
+import com.github.tamir7.contacts.Contact
 import com.pratilipi.contacts.data.LoadingState
-import com.pratilipi.contacts.util.Contactutil
+import com.pratilipi.contacts.util.ContactUtil
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
-class ContactsViewModel @Inject constructor(private val contactutil: Contactutil) : ViewModel() {
+class ContactsViewModel @Inject constructor(private val contactUtil: ContactUtil) : ViewModel() {
 
     private val _contactsLiveData = MutableLiveData<List<Contact>>()
     val contactsLiveData: LiveData<List<Contact>>
@@ -26,7 +26,7 @@ class ContactsViewModel @Inject constructor(private val contactutil: Contactutil
         _loadingStateLiveData.postValue(LoadingState(LoadingState.Status.LOADING))
         uiScope.launch {
             val contacts = withContext(Dispatchers.IO) {
-                contactutil.getContacts()
+                contactUtil.getContacts()
             }
             _contactsLiveData.postValue(contacts)
             _loadingStateLiveData.postValue(LoadingState(LoadingState.Status.SUCCESS))

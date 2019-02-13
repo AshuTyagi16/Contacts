@@ -18,6 +18,7 @@ class Contacts : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        com.github.tamir7.contacts.Contacts.initialize(this)
         component = DaggerContactsApplicationComponent.builder()
             .contextModule(ContextModule(this))
             .build()

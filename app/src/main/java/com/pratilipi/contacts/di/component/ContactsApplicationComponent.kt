@@ -4,7 +4,7 @@ import android.content.Context
 import com.pratilipi.contacts.di.module.ContactsUtilModule
 import com.pratilipi.contacts.di.module.ContextModule
 import com.pratilipi.contacts.di.scope.ApplicationScope
-import com.pratilipi.contacts.util.Contactutil
+import com.pratilipi.contacts.util.ContactUtil
 import dagger.Component
 
 @Component(modules = [ContextModule::class, ContactsUtilModule::class])
@@ -13,5 +13,5 @@ interface ContactsApplicationComponent {
 
     fun context(): Context
 
-    fun contactUtil(): Contactutil
+    fun contactUtil(): ContactUtil
 }

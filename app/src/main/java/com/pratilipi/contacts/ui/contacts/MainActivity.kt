@@ -8,12 +8,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.tamir7.contacts.Contact
 import com.pratilipi.contacts.Contacts
 import com.pratilipi.contacts.R
 import com.pratilipi.contacts.data.LoadingState
 import com.pratilipi.contacts.di.component.DaggerMainActivityComponent
 import com.pratilipi.contacts.di.module.MainActivityModule
 import com.pratilipi.contacts.ui.base.ItemDecorator
+import com.pratilipi.contacts.ui.contacts.contactdetail.ContactDetailFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import permissions.dispatcher.*
 import javax.inject.Inject
@@ -112,8 +114,9 @@ class MainActivity : AppCompatActivity(),
         })
     }
 
-    override fun onItemClicked(position: Int) {
-
+    override fun onItemClicked(position: Int, contact: Contact) {
+        val fragment = ContactDetailFragment.newInstance(contact)
+        fragment.show(supportFragmentManager, fragment.tag)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.github.tamir7.contacts.Contact
 import com.pratilipi.contacts.R
-import com.pratilipi.contacts.data.Contact
 
 class ContactsAdapter(comparator: DiffUtil.ItemCallback<Contact>) :
     ListAdapter<Contact, ContactsViewHolder>(comparator),
@@ -26,13 +26,13 @@ class ContactsAdapter(comparator: DiffUtil.ItemCallback<Contact>) :
         }
     }
 
-    override fun onItemClicked(position: Int) {
+    override fun onItemClicked(position: Int, contact: Contact) {
         if (::onItemClickListener.isInitialized)
-            onItemClickListener.onItemClicked(position)
+            onItemClickListener.onItemClicked(position, contact)
     }
 
     interface OnItemClickListener {
-        fun onItemClicked(position: Int)
+        fun onItemClicked(position: Int, contact: Contact)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

@@ -44,6 +44,9 @@ dependencies {
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
+    //Gson
+    implementation 'com.google.code.gson:gson:2.8.5'
+
     //Kotlin Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
 
@@ -63,5 +66,7 @@ dependencies {
     //LifeCycle Components
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    implementation 'com.github.tamir7.contacts:contacts:1.1.7'
 
 }

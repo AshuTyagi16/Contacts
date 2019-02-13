@@ -3,7 +3,7 @@ package com.pratilipi.contacts.di.module
 import android.content.Context
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.pratilipi.contacts.data.Contact
+import com.github.tamir7.contacts.Contact
 import com.pratilipi.contacts.di.scope.ActivityScope
 import com.pratilipi.contacts.ui.base.ItemDecorator
 import com.pratilipi.contacts.ui.contacts.ContactsAdapter

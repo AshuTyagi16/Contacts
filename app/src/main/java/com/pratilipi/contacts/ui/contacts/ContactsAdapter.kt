@@ -41,8 +41,14 @@ class ContactsAdapter(comparator: DiffUtil.ItemCallback<Contact>) :
             onItemClickListener.onItemClicked(position, contact)
     }
 
+    override fun onDeleteItemClicked(position: Int, contact: Contact) {
+        if (::onItemClickListener.isInitialized)
+            onItemClickListener.onDeleteItemClicked(position, contact)
+    }
+
     interface OnItemClickListener {
         fun onItemClicked(position: Int, contact: Contact)
+        fun onDeleteItemClicked(position: Int, contact: Contact)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

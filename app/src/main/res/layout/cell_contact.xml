@@ -28,4 +28,17 @@
             style="@style/Text.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+    <ImageView
+            android:id="@+id/btnDelete"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/padding_normal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_delete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

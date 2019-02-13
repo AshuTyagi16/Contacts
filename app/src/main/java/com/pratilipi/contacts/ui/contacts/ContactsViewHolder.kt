@@ -1,6 +1,7 @@
 package com.pratilipi.contacts.ui.contacts
 
 import android.view.View
+import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.amulyakhare.textdrawable.TextDrawable
@@ -14,8 +15,7 @@ class ContactsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private lateinit var onItemClickListener: OnItemClickListener
     private val generator = ColorGenerator.MATERIAL
-    private val job = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + job)
+    private val uiScope = CoroutineScope(Dispatchers.Main)
 
     fun setContact(contact: Contact) {
 
@@ -31,8 +31,14 @@ class ContactsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 onItemClickListener.onItemClicked(adapterPosition, contact)
         }
 
+        itemView.btnDelete.setOnClickListener {
+            if (::onItemClickListener.isInitialized)
+                onItemClickListener.onDeleteItemClicked(adapterPosition, contact)
+        }
+
     }
 
+    @WorkerThread
     private suspend fun getDrawable(id: String, name: String): TextDrawable {
         val substr = if (name.length >= 3)
             name.substring(0, 2)
@@ -50,6 +56,7 @@ class ContactsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     interface OnItemClickListener {
         fun onItemClicked(position: Int, contact: Contact)
+        fun onDeleteItemClicked(position: Int, contact: Contact)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

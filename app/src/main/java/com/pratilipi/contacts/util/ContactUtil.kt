@@ -6,6 +6,8 @@ import com.github.tamir7.contacts.Contacts
 import android.provider.ContactsContract
 import android.content.ContentProviderOperation
 import androidx.annotation.WorkerThread
+import android.net.Uri
+import android.provider.ContactsContract.PhoneLookup
 
 
 class ContactUtil(private val context: Context) {
@@ -87,6 +89,31 @@ class ContactUtil(private val context: Context) {
             false
         }
 
+    }
 
+    @WorkerThread
+    suspend fun deleteContact(name: String): Boolean {
+        val cur = context.contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
+        try {
+            cur?.let {
+                if (it.moveToFirst()) {
+                    do {
+                        if (it.getString(cur.getColumnIndex(PhoneLookup.DISPLAY_NAME)) == name) {
+                            val lookupKey = it.getString(cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY))
+                            val uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey)
+                            context.contentResolver.delete(uri, null, null)
+                            return true
+                        }
+                    } while (it.moveToNext())
+                }
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        } finally {
+            cur?.close()
+        }
+        return false
     }
 }

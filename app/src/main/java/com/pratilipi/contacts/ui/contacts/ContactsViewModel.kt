@@ -16,6 +16,10 @@ class ContactsViewModel @Inject constructor(private val contactUtil: ContactUtil
         get() = _contactsLiveData
 
 
+    private val _deleteContactLiveData = MutableLiveData<Boolean>()
+    val deleteContactLiveData: LiveData<Boolean>
+        get() = _deleteContactLiveData
+
     private val _loadingStateLiveData = MutableLiveData<LoadingState>()
     val loadingStateLiveData: LiveData<LoadingState>
         get() = _loadingStateLiveData
@@ -30,6 +34,17 @@ class ContactsViewModel @Inject constructor(private val contactUtil: ContactUtil
                 contactUtil.getContacts()
             }
             _contactsLiveData.postValue(contacts)
+            _loadingStateLiveData.postValue(LoadingState(LoadingState.Status.SUCCESS))
+        }
+    }
+
+    fun deleteContact(name: String) {
+        _loadingStateLiveData.postValue(LoadingState(LoadingState.Status.LOADING))
+        uiScope.launch {
+            val isDeleted = withContext(Dispatchers.IO) {
+                contactUtil.deleteContact(name)
+            }
+            _deleteContactLiveData.postValue(isDeleted)
             _loadingStateLiveData.postValue(LoadingState(LoadingState.Status.SUCCESS))
         }
     }

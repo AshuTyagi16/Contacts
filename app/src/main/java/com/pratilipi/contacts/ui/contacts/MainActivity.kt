@@ -119,13 +119,17 @@ class MainActivity : AppCompatActivity(),
         contactsViewModel.contactsLiveData.observe(this, Observer { contacts ->
             adapter.submitList(contacts)
         })
+
+        contactsViewModel.deleteContactLiveData.observe(this, Observer {
+            if (it)
+                contactsViewModel.getContacts()
+        })
     }
 
     private fun observeLoadingState() {
         contactsViewModel.loadingStateLiveData.observe(this, Observer { loadingState ->
             when (loadingState.status) {
                 LoadingState.Status.LOADING -> {
-                    rvContacts.visibility = View.GONE
                     progressBar.visibility = View.VISIBLE
                 }
                 LoadingState.Status.SUCCESS -> {
@@ -144,7 +148,7 @@ class MainActivity : AppCompatActivity(),
     private fun openSettings() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         val uri = Uri.fromParts("package", packageName, null)
-        intent.setData(uri)
+        intent.data = uri
         startActivityForResult(intent, PERMISSION_CODE)
     }
 
@@ -169,6 +173,10 @@ class MainActivity : AppCompatActivity(),
     override fun onItemClicked(position: Int, contact: Contact) {
         val fragment = ContactDetailFragment.newInstance(contact)
         fragment.show(supportFragmentManager, fragment.tag)
+    }
+
+    override fun onDeleteItemClicked(position: Int, contact: Contact) {
+        contactsViewModel.deleteContact(contact.displayName)
     }
 
     override fun onAskPermissionClick() {

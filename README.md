@@ -45,4 +45,7 @@
 </br>
 </br>
 </br>
-![AddContact](https://i.imgur.com/8AWS2hr.jpg))
+![AddContact](https://i.imgur.com/8AWS2hr.jpg)
+
+<h1>Apk</h1>
+<h4>You can download the release apk from (https://github.com/AshuTyagi16/Contacts/blob/master/app/release/app-release.apk)</h4>

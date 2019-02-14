@@ -17,4 +17,7 @@
         cannot show or add contacts without these permissions.
     </string>
 
+    <!-- Progress Loader -->
+    <string name="default_loading_message">Please wait…</string>
+
 </resources>

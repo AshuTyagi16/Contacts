@@ -18,6 +18,7 @@ import com.pratilipi.contacts.data.model.LoadingState
 import com.pratilipi.contacts.data.model.event.ContactAddedEvent
 import com.pratilipi.contacts.di.component.DaggerAddContactFragmentComponent
 import com.pratilipi.contacts.ui.base.RoundedBottomSheetDialogFragment
+import com.pratilipi.contacts.ui.widget.ProgressModal
 import kotlinx.android.synthetic.main.fragment_add_contact.*
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
@@ -32,6 +33,8 @@ class AddContactFragment : RoundedBottomSheetDialogFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var addContactViewModel: AddContactViewModel
+
+    private lateinit var progressModal: ProgressModal
 
     companion object {
         private const val PERMISSION_CODE = 9923
@@ -52,6 +55,7 @@ class AddContactFragment : RoundedBottomSheetDialogFragment() {
                 .build()
             component.injectAddContactFragment(this)
             addContactViewModel = ViewModelProviders.of(this, viewModelFactory).get(AddContactViewModel::class.java)
+            progressModal = ProgressModal(it, getString(R.string.default_loading_message))
         }
     }
 
@@ -62,6 +66,12 @@ class AddContactFragment : RoundedBottomSheetDialogFragment() {
         setClickListeners()
 
         observeLiveData()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::progressModal.isInitialized && progressModal.isShowing)
+            progressModal.dismiss()
     }
 
     private fun observeLiveData() {
@@ -77,18 +87,19 @@ class AddContactFragment : RoundedBottomSheetDialogFragment() {
         addContactViewModel.loadingStateLiveData.observe(this, Observer { loadingState ->
             when (loadingState.status) {
                 LoadingState.Status.LOADING -> {
-
+                    progressModal.show()
                 }
                 LoadingState.Status.SUCCESS -> {
                     context?.let {
                         Toast.makeText(context, getString(R.string.contact_added_successfully), Toast.LENGTH_SHORT)
                             .show()
                     }
+                    progressModal.dismiss()
                     dismiss()
 
                 }
                 LoadingState.Status.FAILED -> {
-
+                    progressModal.show()
                 }
             }
         })

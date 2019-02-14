@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- FONT SIZE -->
+    <dimen name="font_extra_large">24sp</dimen>
+    <dimen name="font_large">20sp</dimen>
+    <dimen name="font_normal">16sp</dimen>
+    <dimen name="font_small">12sp</dimen>
+
+    <!-- PADDING -->
+    <dimen name="padding_huge">36dp</dimen>
+    <dimen name="padding_large">30dp</dimen>
+    <dimen name="padding_big">24dp</dimen>
+    <dimen name="padding_normal">16dp</dimen>
+    <dimen name="padding_medium">10dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_micro">4dp</dimen>
+
+    <!-- Bottom Sheet -->
+    <dimen name="bottom_sheet_corner_radius">16dp</dimen>
+    <dimen name="bottom_sheet_top_padding">8dp</dimen>
+
+    <!-- Rounded Button -->
+    <dimen name="rounded_button_corner_radius">26dp</dimen>
+
+
+</resources>

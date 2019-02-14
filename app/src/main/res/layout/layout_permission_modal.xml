@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@android:color/black"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="@dimen/padding_small">
+
+    <TextView
+            android:id="@+id/tvMessage"
+            style="@style/Text.Primary.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:gravity="center"
+            android:text="@string/permission_message"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+            android:id="@+id/btnAskPermission"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_rounded_corner_button"
+            android:clickable="false"
+            android:focusable="false"
+            android:gravity="center"
+            android:padding="@dimen/padding_normal"
+            android:text="@string/turn_on"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMessage"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

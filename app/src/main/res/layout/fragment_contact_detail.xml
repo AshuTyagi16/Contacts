@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:background="@android:color/black"
+        android:layout_height="match_parent">
+
+    <ImageView
+            android:id="@+id/ivPerson"
+            android:layout_width="match_parent"
+            tools:src="@tools:sample/avatars"
+            android:scaleType="fitCenter"
+            android:clickable="true"
+            android:layout_marginTop="@dimen/padding_normal"
+            android:foreground="?attr/selectableItemBackground"
+            android:focusable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="250dp"/>
+
+    <TextView
+            android:id="@+id/tvName"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/ivPerson"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            tools:text="@tools:sample/full_names"
+            android:textSize="@dimen/font_large"
+            android:layout_marginTop="@dimen/padding_normal"
+            style="@style/Text.Primary.Bold"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/padding_small"
+            app:layout_constraintTop_toBottomOf="@id/tvName">
+        <TextView
+                android:id="@+id/tvNumber"
+                android:padding="@dimen/padding_small"
+                android:gravity="start|center_vertical"
+                style="@style/Text.Primary"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:focusable="true"
+                app:layout_constraintStart_toStartOf="parent"
+                android:drawableStart="@drawable/ic_call"
+                android:drawablePadding="@dimen/padding_normal"
+                tools:text="@tools:sample/us_phones"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <ImageView
+                android:id="@+id/ivMessage"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_message"
+                android:foreground="?attr/selectableItemBackground"
+                android:layout_marginEnd="@dimen/padding_medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/tvNumber"/>
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="@id/tvNumber"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="@dimen/padding_small"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/padding_normal"
+            app:layout_constraintTop_toBottomOf="@id/clNumber">
+
+        <TextView
+                android:id="@+id/tvEmail"
+                android:padding="@dimen/padding_small"
+                android:gravity="start|center_vertical"
+                style="@style/Text.Primary"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintStart_toStartOf="parent"
+                android:drawableStart="@drawable/ic_mail"
+                android:drawablePadding="@dimen/padding_normal"
+                tools:text="@tools:sample/us_zipcodes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="@id/tvEmail"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="@dimen/padding_small"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+            app:layout_constraintTop_toBottomOf="@id/clEmail"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
